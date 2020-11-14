@@ -17,7 +17,89 @@ library(ggpubr)
 
 ### Part 1: Rank-based test example (Mann Whitney U)
 
-```{r}
+Comparing ranks (medians comparison) between more than 2 samples using wilcox.test()
 
+```{r}
+set.seed(1414) #create random samples with integers from 1 to x
+gp_1 <- sample.int(20, size = 15, replace = TRUE)
+
+set.seed(1424)
+gp_2 <- sample.int(30, size = 15, replace = TRUE)
 ```
+
+Initial exploration of data
+
+```{r}
+hist(gp_1)
+
+hist(gp_2)
+```
+Why comparing ranks here: 
+1. Not clearly normally distributed
+2. Somewhat small sample size (n =15)
+3. I've decided medians more valuable metric
+
+Here we'll use a Mann-Whitney U to answer: "is there a significant difference in ranks (medians) between gp_1 and gp_2?"
+
+```{r}
+my_mwu <- wilcox.test(gp_1, gp_2)
+```
+
+Here we get a p-value of 0.28. This means that if the null hypothesis is true and these samples we drawn from populations with the same median, there is a 28% chance that we would find a difference in medians at least as different as we found if the samples were drawn randomly. Not enough to reject the null hypothesis if using a p-value of .05.  
+
+### Sample linear regression 
+
+Explore the relationship between flipper length and body mass for penguins, including all three penguin species in the palmerpenguins dataset. 
+
+#### First, view data 
+
+```{r}
+ggplot(data = penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point()
+```
+Here, looks like an overall linear relationship between flipper length and body mass makes sense. 
+
+#### Model the data using lm()
+
+```{r}
+penguin_lm <- lm(body_mass_g ~ flipper_length_mm, data = penguins) #linear model, stored as penguin_lm
+
+#Return the complete overview
+summary(penguin_lm)
+```
+
+Multiple R^2 value is 0.759, meaning that 75.9% of variance in body mass is explained by flipper length. 
+
+#### Access model outputs 
+
+Slope: 49.69 (g/mm)
+y-intercept: -5780.83 (g)
+full equation is mass = 49.69*(flipper length) + (-5780.83)
+
+Use broom::tidy() to get outputs into a nice format. 
+
+```{r}
+penguin_lm_tidy <- broom::tidy(penguin_lm)
+
+#intercept
+penguin_int <- penguin_lm_tidy$estimate[1]
+
+#Flipper length coefficient
+penguin_coef <- penguin_lm_tidy$estimate[2]
+```
+
+Other info can come from broom::glance()
+
+```{r}
+#Metrics at a glance
+penguin_lm_out <- broom::glance(penguin_lm)
+```
+
+#### Explore model assumptions
+
+```{r}
+plot(penguin_lm)
+```
+
+#### Visualize the model
 

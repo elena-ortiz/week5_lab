@@ -1,0 +1,23 @@
+---
+title: "Week6_Lab"
+author: "Elena Ortiz"
+date: "11/14/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(palmerpenguins)
+library(broom)
+library(ggpubr)
+```
+
+## Week 6 Coding: Intro to Linear Regression 
+
+### Part 1: Rank-based test example (Mann Whitney U)
+
+```{r}
+
+```
+

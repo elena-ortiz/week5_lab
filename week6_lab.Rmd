@@ -103,3 +103,27 @@ plot(penguin_lm)
 
 #### Visualize the model
 
+Actually look at the model in ggplot
+
+```{r}
+ggplot(data = penguins, aes(x = flipper_length_mm, y = body_mass_g)) +
+  geom_point(size = 2) +
+  geom_smooth(method = "lm",
+              color = "blue",
+              size = 0.5,
+              fill = "gray10",
+              alpha = 0.5) +
+  theme_light() +
+  ggpubr::stat_regline_equation(label.x = 180, label.y = 5700)
+```
+
+### Find Pearson's r for correlation:
+
+Using cor.test() 
+
+```{r}
+penguins_cor <- cor.test(penguins$flipper_length_mm, penguins$body_mass_g)
+```
+
+Here we get r=0.87, t(340) = 32.72, p<0.001. This means there is a strong positive correlation between flipper length and body mass. 
+
